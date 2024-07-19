@@ -5,6 +5,8 @@ import { headers } from 'next/headers';
 import { cookieToInitialState } from 'wagmi';
 import { config } from '@/config/index';
 import Web3ModalProvider from '@/config/context';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,7 +25,9 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={inter.className}>
 				<Web3ModalProvider initialState={initialState!}>
-					{children}
+					<Header />
+					<main>{children}</main>
+					<Footer />
 				</Web3ModalProvider>
 			</body>
 		</html>
