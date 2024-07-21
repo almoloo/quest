@@ -180,4 +180,31 @@ contract Quest is ERC1155, Ownable {
         }
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
     }
+
+    /**
+     * @notice Retrieves all NFTs created by a specified address.
+     */
+    function getNftsByCreator(
+        address creator
+    ) external view returns (NftData[] memory) {
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < lastId; i++) {
+            if (nftData[i].creator == creator) {
+                count++;
+            }
+        }
+
+        NftData[] memory result = new NftData[](count);
+        uint256 index = 0;
+
+        for (uint256 i = 0; i < lastId; i++) {
+            if (nftData[i].creator == creator) {
+                result[index] = nftData[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
 }
