@@ -28,6 +28,25 @@ export const openCampusTestnet = defineChain({
 	},
 });
 
+export const localChain = defineChain({
+	id: 31337,
+	name: 'Localhost',
+	rpcUrls: {
+		default: { http: ['http://localhost:8545'] },
+	},
+	nativeCurrency: {
+		name: 'ETH',
+		symbol: 'ETH',
+		decimals: 18,
+	},
+	blockExplorers: {
+		default: {
+			name: 'Etherscan',
+			url: 'https://etherscan.io/',
+		},
+	},
+});
+
 const metadata = {
 	name: 'Quest',
 	description: 'blockchain-powered achievement badges.',
@@ -39,7 +58,7 @@ const metadata = {
 };
 
 export const config = defaultWagmiConfig({
-	chains: [openCampusTestnet] as const,
+	chains: [openCampusTestnet, localChain] as const,
 	projectId: walletConnectProjectId,
 	metadata,
 	ssr: true,
