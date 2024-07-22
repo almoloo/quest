@@ -7,6 +7,7 @@ import { config } from '@/config/index';
 import Web3ModalProvider from '@/config/context';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,9 +26,11 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={inter.className}>
 				<Web3ModalProvider initialState={initialState!}>
-					<Header />
-					<main>{children}</main>
-					<Footer />
+					<AntdRegistry>
+						<Header />
+						<main>{children}</main>
+						<Footer />
+					</AntdRegistry>
 				</Web3ModalProvider>
 			</body>
 		</html>
