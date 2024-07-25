@@ -3,7 +3,17 @@
 import { useAccount, useWriteContract, useReadContract } from 'wagmi';
 import { abi } from '@/config/abi';
 import { Suspense, useEffect, useState } from 'react';
-import { Button, Form, Input, Space, Typography, Upload } from 'antd';
+import {
+	Button,
+	Form,
+	Input,
+	Space,
+	Typography,
+	Upload,
+	message,
+	Alert,
+	Spin,
+} from 'antd';
 import type { GetProp, UploadFile, UploadProps, FormProps } from 'antd';
 import {
 	EditTwoTone,
@@ -20,8 +30,14 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const Page = () => {
 	const [form] = Form.useForm();
+	const [messageApi, contextHolder] = message.useMessage();
 	const { address } = useAccount();
-	const { data: submitHash, writeContract, isPending } = useWriteContract();
+	const {
+		data: submitHash,
+		writeContract,
+		isPending,
+		isError,
+	} = useWriteContract();
 
 	const [initialFormData, setInitialFormData] = useState<Profile>({
 		name: '',
@@ -34,7 +50,6 @@ const Page = () => {
 	const [selectedAvatar, setSelectedAvatar] = useState<UploadFile[]>([]);
 	const [selectedCover, setSelectedCover] = useState<UploadFile[]>([]);
 	const [formSubmitting, setFormSubmitting] = useState(false);
-	const [submitMessage, setSubmitMessage] = useState('');
 
 	// ----- GET PROFILE DATA -----
 	const { data: profileData, isFetched: fetchedProfileData } =
@@ -102,12 +117,11 @@ const Page = () => {
 	};
 	const handleSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
 		setFormSubmitting(true);
-
 		try {
-			setSubmitMessage('Submitting Profile...');
+			messageApi.loading('Submitting Profile...');
 			// ----- AVATAR UPLOAD -----
 			if (values.avatarImage) {
-				setSubmitMessage('Uploading Avatar...');
+				messageApi.loading('Uploading Avatar...');
 				const data = new FormData();
 				data.append('file', values.avatarImage.file);
 
@@ -116,7 +130,7 @@ const Page = () => {
 			}
 			// ----- COVER UPLOAD -----
 			if (values.coverImage) {
-				setSubmitMessage('Uploading Cover...');
+				messageApi.loading('Uploading Cover...');
 				const data = new FormData();
 				data.append('file', values.coverImage.file);
 
@@ -138,14 +152,16 @@ const Page = () => {
 			});
 		} catch (error) {
 			console.error('Failed:', error);
+			messageApi.error('Failed to submit profile');
 		} finally {
 			setFormSubmitting(false);
-			setSubmitMessage('');
+			messageApi.destroy();
 		}
 	};
 
 	return (
 		<>
+			{contextHolder}
 			<div className="mb-5">
 				<Title level={3}>
 					<EditTwoTone className="mr-4" />
@@ -156,14 +172,15 @@ const Page = () => {
 					visible to other users.
 				</Text>
 			</div>
-			{!fetchedProfileData ? (
-				<LoadingForm />
-			) : (
+			<Spin
+				spinning={!fetchedProfileData}
+				size="large"
+			>
 				<Form
 					layout="vertical"
 					form={form}
 					onFinish={handleSubmit}
-					disabled={formSubmitting}
+					disabled={formSubmitting || isPending}
 				>
 					<Form.Item label="Wallet Address">
 						<Input
@@ -332,6 +349,16 @@ const Page = () => {
 							<Input />
 						</Form.Item>
 					</div>
+					{isError && (
+						<div className="mb-5">
+							<Alert
+								message="Error"
+								description="Failed to submit profile to the blockchain"
+								type="error"
+								showIcon
+							/>
+						</div>
+					)}
 					<Form.Item>
 						<Button
 							type="primary"
@@ -343,7 +370,7 @@ const Page = () => {
 						</Button>
 					</Form.Item>
 				</Form>
-			)}
+			</Spin>
 			{/* {hash && <div>tx hash: {hash}</div>} */}
 		</>
 	);
