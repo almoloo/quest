@@ -3,16 +3,7 @@
 import { useAccount, useWriteContract, useReadContract } from 'wagmi';
 import { abi } from '@/config/abi';
 import { useEffect, useState } from 'react';
-import {
-	Button,
-	Form,
-	Input,
-	Typography,
-	Upload,
-	message,
-	Alert,
-	Spin,
-} from 'antd';
+import { Button, Form, Input, Upload, message, Alert, Spin } from 'antd';
 import type { UploadFile, UploadProps, FormProps } from 'antd';
 import {
 	EditTwoTone,
