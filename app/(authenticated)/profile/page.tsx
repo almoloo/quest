@@ -118,10 +118,12 @@ const Page = () => {
 	const handleSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
 		setFormSubmitting(true);
 		try {
-			messageApi.loading('Submitting Profile...');
+			messageApi.destroy();
+			messageApi.loading('Submitting Profile...', 0);
 			// ----- AVATAR UPLOAD -----
 			if (values.avatarImage) {
-				messageApi.loading('Uploading Avatar...');
+				messageApi.destroy();
+				messageApi.loading('Uploading Avatar...', 0);
 				const data = new FormData();
 				data.append('file', values.avatarImage.file);
 
@@ -130,7 +132,8 @@ const Page = () => {
 			}
 			// ----- COVER UPLOAD -----
 			if (values.coverImage) {
-				messageApi.loading('Uploading Cover...');
+				messageApi.destroy();
+				messageApi.loading('Uploading Cover...', 0);
 				const data = new FormData();
 				data.append('file', values.coverImage.file);
 
@@ -152,6 +155,7 @@ const Page = () => {
 			});
 		} catch (error) {
 			console.error('Failed:', error);
+			messageApi.destroy();
 			messageApi.error('Failed to submit profile');
 		} finally {
 			setFormSubmitting(false);
@@ -359,6 +363,16 @@ const Page = () => {
 							/>
 						</div>
 					)}
+					{submitHash && (
+						<div className="mb-5">
+							<Alert
+								message="Success"
+								description="Profile submitted successfully"
+								type="success"
+								showIcon
+							/>
+						</div>
+					)}
 					<Form.Item>
 						<Button
 							type="primary"
@@ -371,7 +385,6 @@ const Page = () => {
 					</Form.Item>
 				</Form>
 			</Spin>
-			{/* {hash && <div>tx hash: {hash}</div>} */}
 		</>
 	);
 };
