@@ -68,7 +68,7 @@ contract Quest is ERC1155, Ownable {
     /**
      * @notice Gets the achievement data of the specified token ID.
      */
-    function getAchivment(uint256 id) external view returns (NftData memory) {
+    function getAchievement(uint256 id) external view returns (NftData memory) {
         return nftData[id];
     }
 
@@ -82,7 +82,7 @@ contract Quest is ERC1155, Ownable {
     /**
      * @notice Adds a new achievement.
      */
-    function addAchivment(string memory url, bool transferable) public {
+    function addAchievement(string memory url, bool transferable) public {
         nftData[lastId] = NftData(msg.sender, url, transferable);
         emit AchievementCreated(lastId, nftData[lastId]);
         lastId++;
@@ -91,7 +91,7 @@ contract Quest is ERC1155, Ownable {
     /**
      * @notice Edits an existing achievement.
      */
-    function editeAchivment(
+    function editAchievement(
         uint256 id,
         string memory url,
         bool transferable
@@ -110,7 +110,7 @@ contract Quest is ERC1155, Ownable {
     /**
      * @notice Sends an achievement to an account.
      */
-    function sendAchivment(
+    function sendAchievement(
         address account,
         uint256 achievementId,
         uint256 amount,
@@ -126,7 +126,7 @@ contract Quest is ERC1155, Ownable {
     /**
      * @notice Sends a batch of achievements to an account.
      */
-    function sendAchivmentBatch(
+    function sendAchievementBatch(
         address to,
         uint256[] memory achievementIds,
         uint256[] memory amounts,
