@@ -13,7 +13,7 @@ import {
 	Alert,
 	Spin,
 } from 'antd';
-import type { GetProp, UploadFile, UploadProps, FormProps } from 'antd';
+import type { UploadFile, UploadProps, FormProps } from 'antd';
 import {
 	EditTwoTone,
 	MinusCircleOutlined,
@@ -21,8 +21,8 @@ import {
 } from '@ant-design/icons';
 import { Profile, ProfileInput } from '@/config/definitions';
 import { uploadImageToIPFS } from '@/config/action';
+import PageTitle from '@/components/layout/PageTitle';
 
-const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 const Page = () => {
@@ -163,16 +163,11 @@ const Page = () => {
 	return (
 		<>
 			{contextHolder}
-			<div className="mb-5">
-				<Title level={3}>
-					<EditTwoTone className="mr-4" />
-					Edit Profile
-				</Title>
-				<Text>
-					Edit your profile information. This information will be
-					visible to other users.
-				</Text>
-			</div>
+			<PageTitle
+				title="Edit Profile"
+				description="Edit your profile information. This information will be visible to other users."
+				icon={<EditTwoTone />}
+			/>
 			<Spin
 				spinning={!fetchedProfileData}
 				size="large"
