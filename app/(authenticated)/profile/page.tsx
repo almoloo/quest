@@ -2,12 +2,11 @@
 
 import { useAccount, useWriteContract, useReadContract } from 'wagmi';
 import { abi } from '@/config/abi';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	Button,
 	Form,
 	Input,
-	Space,
 	Typography,
 	Upload,
 	message,
@@ -21,12 +20,10 @@ import {
 	UploadOutlined,
 } from '@ant-design/icons';
 import { Profile, ProfileInput } from '@/config/definitions';
-import LoadingForm from '@/components/profile/LoadingForm';
 import { uploadImageToIPFS } from '@/config/action';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const Page = () => {
 	const [form] = Form.useForm();
