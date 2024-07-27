@@ -6,7 +6,8 @@ import {
 	achievementDesigns,
 	AchievementTemplateColor,
 } from '@/config/achievementDesign';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
+import { NFTMetadataAttribute } from '@/config/definitions';
 
 declare global {
 	namespace JSX {
@@ -23,7 +24,10 @@ declare global {
 	}
 }
 
-interface BadgeCreatorProps {}
+interface BadgeCreatorProps {
+	badgeRef: React.RefObject<HTMLDivElement>;
+	setTraits: React.Dispatch<React.SetStateAction<NFTMetadataAttribute[]>>;
+}
 
 const EmojiIcon = (props: { id: string }) => (
 	<>
@@ -74,6 +78,28 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 			}
 		}
 	}, [currentDesign]);
+
+	useEffect(() => {
+		props.setTraits([
+			{
+				trait_type: 'emojiId',
+				value: emoji,
+			},
+			{
+				trait_type: 'text',
+				value: word,
+			},
+			{
+				trait_type: 'themeId',
+				value: currentDesignColor?.id.toString() || '',
+			},
+			{
+				trait_type: 'badgeId',
+				value: currentDesign?.toString() || '',
+			},
+		]);
+	}, [currentDesign, currentDesignColor, emoji, word]);
+
 	return (
 		<>
 			<div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2">
@@ -131,7 +157,10 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 					/>
 				</section>
 				<section className="checkeredBg rounded-t-xl lg:rounded-l-none lg:rounded-r-xl order-1 lg:order-2 p-10 aspect-square border border-b-0 lg:border-l-0 lg:border-b">
-					<div className="w-full h-full flex items-center justify-center">
+					<div
+						className="w-full h-full flex items-center justify-center"
+						ref={props.badgeRef}
+					>
 						{currentDesign && (
 							<>
 								{achievementDesigns.map((design) => {

@@ -401,7 +401,7 @@ export const abi = [
 				type: 'bool',
 			},
 		],
-		name: 'addAchivment',
+		name: 'addAchievement',
 		outputs: [],
 		stateMutability: 'nonpayable',
 		type: 'function',
@@ -472,7 +472,7 @@ export const abi = [
 				type: 'bool',
 			},
 		],
-		name: 'editeAchivment',
+		name: 'editAchievement',
 		outputs: [],
 		stateMutability: 'nonpayable',
 		type: 'function',
@@ -485,7 +485,7 @@ export const abi = [
 				type: 'uint256',
 			},
 		],
-		name: 'getAchivment',
+		name: 'getAchievement',
 		outputs: [
 			{
 				components: [
@@ -508,6 +508,42 @@ export const abi = [
 				internalType: 'struct Quest.NftData',
 				name: '',
 				type: 'tuple',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'creator',
+				type: 'address',
+			},
+		],
+		name: 'getNftsByCreator',
+		outputs: [
+			{
+				components: [
+					{
+						internalType: 'address',
+						name: 'creator',
+						type: 'address',
+					},
+					{
+						internalType: 'string',
+						name: 'url',
+						type: 'string',
+					},
+					{
+						internalType: 'bool',
+						name: 'transferable',
+						type: 'bool',
+					},
+				],
+				internalType: 'struct Quest.NftData[]',
+				name: '',
+				type: 'tuple[]',
 			},
 		],
 		stateMutability: 'view',
@@ -697,7 +733,7 @@ export const abi = [
 				type: 'bytes',
 			},
 		],
-		name: 'sendAchivment',
+		name: 'sendAchievement',
 		outputs: [],
 		stateMutability: 'nonpayable',
 		type: 'function',
@@ -725,7 +761,7 @@ export const abi = [
 				type: 'bytes',
 			},
 		],
-		name: 'sendAchivmentBatch',
+		name: 'sendAchievementBatch',
 		outputs: [],
 		stateMutability: 'nonpayable',
 		type: 'function',

@@ -1,6 +1,6 @@
 'use server';
 
-export const uploadImageToIPFS = async (file: FormData) => {
+export const uploadFileToIPFS = async (file: FormData) => {
 	const options = {
 		method: 'POST',
 		headers: {
@@ -14,8 +14,34 @@ export const uploadImageToIPFS = async (file: FormData) => {
 		options
 	);
 	if (!res.ok) {
-		throw new Error('Failed to upload image to IPFS');
+		throw new Error('Failed to upload file to IPFS');
 	}
 	const json = await res.json();
 	return json.IpfsHash;
+};
+
+export const uploadJSONToIPFS = async (json: object) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${process.env.PINATA_JWT}`,
+		},
+		body: JSON.stringify({
+			pinataContent: json,
+			pinataMetadata: {
+				name: 'metadata.json',
+			},
+		}),
+	};
+
+	const res = await fetch(
+		'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+		options
+	);
+	if (!res.ok) {
+		throw new Error('Failed to upload JSON to IPFS');
+	}
+	const data = await res.json();
+	return data.IpfsHash;
 };

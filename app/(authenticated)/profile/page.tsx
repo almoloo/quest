@@ -11,7 +11,7 @@ import {
 	UploadOutlined,
 } from '@ant-design/icons';
 import { Profile, ProfileInput } from '@/config/definitions';
-import { uploadImageToIPFS } from '@/config/action';
+import { uploadFileToIPFS } from '@/config/action';
 import PageTitle from '@/components/layout/PageTitle';
 
 const { TextArea } = Input;
@@ -115,7 +115,7 @@ const Page = () => {
 				const data = new FormData();
 				data.append('file', values.avatarImage.file);
 
-				const avatarUrl = await uploadImageToIPFS(data);
+				const avatarUrl = await uploadFileToIPFS(data);
 				values.avatarUrl = avatarUrl;
 			}
 			// ----- COVER UPLOAD -----
@@ -125,11 +125,12 @@ const Page = () => {
 				const data = new FormData();
 				data.append('file', values.coverImage.file);
 
-				const coverUrl = await uploadImageToIPFS(data);
+				const coverUrl = await uploadFileToIPFS(data);
 				values.coverUrl = coverUrl;
 			}
 			writeContract({
-				address: '0x5fbdb2315678afecb367f032d93f642f64180aa3',
+				address: process.env
+					.NEXT_PUBLIC_CONTRACT_ADDRESS! as `0x${string}`,
 				abi,
 				functionName: 'setProfile',
 				args: [

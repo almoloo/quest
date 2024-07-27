@@ -16,7 +16,7 @@ const Badge1 = (props: Badge1Props) => {
 		<>
 			<div className="bg-white shadow rounded-xl p-5 flex items-start w-full max-w-max gap-5">
 				<div
-					className={`aspect-square flex items-center justify-center rounded-full outline outline-4 p-3 ${props.color.classNames.outline} ${props.color.classNames.emojiBg}`}
+					className={`aspect-square flex items-center justify-center rounded-full p-3 border-4 ${props.color.classNames.outline} ${props.color.classNames.emojiBg}`}
 				>
 					<span className="text-2xl leading-none">
 						<em-emoji

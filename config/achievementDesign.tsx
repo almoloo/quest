@@ -28,7 +28,7 @@ export const achievementDesigns: AchievementTemplate[] = [
 				main: 'bg-sky-600',
 				accent: 'bg-sky-300',
 				classNames: {
-					outline: 'outline-sky-300',
+					outline: 'border-sky-300',
 					emojiBg: 'bg-sky-100',
 				},
 			},
@@ -37,7 +37,7 @@ export const achievementDesigns: AchievementTemplate[] = [
 				main: 'bg-rose-600',
 				accent: 'bg-rose-300',
 				classNames: {
-					outline: 'outline-rose-300',
+					outline: 'border-rose-300',
 					emojiBg: 'bg-rose-100',
 				},
 			},
