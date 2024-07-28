@@ -10,7 +10,7 @@ import { Button } from 'antd';
 import { NFTMetadataAttribute } from '@/config/definitions';
 
 declare global {
-	namespace JSX {
+	namespace React.JSX {
 		interface IntrinsicElements {
 			'em-emoji': EmojiAttributes;
 		}
@@ -27,6 +27,7 @@ declare global {
 interface BadgeCreatorProps {
 	badgeRef: React.RefObject<HTMLDivElement>;
 	setTraits: React.Dispatch<React.SetStateAction<NFTMetadataAttribute[]>>;
+	traits?: NFTMetadataAttribute[];
 }
 
 const EmojiIcon = (props: { id: string }) => (
@@ -69,6 +70,39 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 	}, []);
 
 	useEffect(() => {
+		if (props.traits) {
+			const emojiTrait = props.traits.find(
+				(trait) => trait.trait_type === 'emojiId'
+			);
+			const textTrait = props.traits.find(
+				(trait) => trait.trait_type === 'text'
+			);
+			const themeTrait = props.traits.find(
+				(trait) => trait.trait_type === 'themeId'
+			);
+			const badgeTrait = props.traits.find(
+				(trait) => trait.trait_type === 'badgeId'
+			);
+			if (emojiTrait) {
+				setEmoji(emojiTrait.value);
+			}
+			if (textTrait) {
+				setWord(textTrait.value);
+			}
+			if (badgeTrait) {
+				setCurrentDesign(parseInt(badgeTrait.value));
+			}
+			if (themeTrait) {
+				setCurrentDesignColor(
+					achievementDesigns.find(
+						(d) => d.id === parseInt(themeTrait.value)
+					)?.colors[0]!
+				);
+			}
+		}
+	}, [props.traits]);
+
+	useEffect(() => {
 		if (currentDesign) {
 			const design = achievementDesigns.find(
 				(d) => d.id === currentDesign
@@ -108,12 +142,13 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 						<option
 							value=""
 							disabled
-							selected
+							selected={!currentDesign}
 						></option>
 						{achievementDesigns.map((design) => (
 							<option
 								key={design.id}
 								value={design.id}
+								selected={design.id === currentDesign}
 							>
 								{design.name}
 							</option>
@@ -128,6 +163,10 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 											<option
 												key={color.id}
 												value={color.id}
+												selected={
+													color.id ===
+													currentDesignColor?.id
+												}
 											>
 												{color.main}
 											</option>
@@ -139,7 +178,7 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 					<Button
 						size="large"
 						onClick={() => setIsPickerOpen(!isPickerOpen)}
-						icon={<EmojiIcon id="+1" />}
+						icon={<EmojiIcon id={emoji || '+1'} />}
 					>
 						Pick Emoji
 					</Button>

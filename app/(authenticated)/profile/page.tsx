@@ -42,7 +42,7 @@ const Page = () => {
 	// ----- GET PROFILE DATA -----
 	const { data: profileData, isFetched: fetchedProfileData } =
 		useReadContract({
-			address: '0x5fbdb2315678afecb367f032d93f642f64180aa3',
+			address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS! as `0x${string}`,
 			abi,
 			functionName: 'getProfile',
 			args: [address],

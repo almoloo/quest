@@ -2,7 +2,7 @@ import { NFTMetadata } from '@/config/definitions';
 import { uploadFileToIPFS, uploadJSONToIPFS } from './action';
 
 export const convertIPFSHash = (hash: string) => {
-	return `https://ipfs.io/ipfs/${hash}`;
+	return `${process.env.NEXT_PUBLIC_PINATA_GATEWAY}/ipfs/${hash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_PINATA_GATEWAY_TOKEN}`;
 };
 
 export const generateNFTMetadata = async (
