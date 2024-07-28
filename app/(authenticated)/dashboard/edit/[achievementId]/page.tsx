@@ -9,7 +9,7 @@ import { TrophyTwoTone } from '@ant-design/icons';
 import * as htmlToImage from 'html-to-image';
 import { toPng } from 'html-to-image';
 import React, { useEffect, useRef, useState } from 'react';
-import { useReadContract, useWriteContract } from 'wagmi';
+import { useAccount, useReadContract, useWriteContract } from 'wagmi';
 
 interface AchievementDataType {
 	creator: `0x${string}`;
@@ -18,12 +18,13 @@ interface AchievementDataType {
 }
 
 const Page = ({ params }: { params: { achievementId: string } }) => {
+	const { address } = useAccount();
 	const badgeRef = useRef<HTMLDivElement>(null);
 	const { data: achievementData, isFetched: fetchedAchievementData } =
 		useReadContract({
 			address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS! as `0x${string}`,
 			abi,
-			functionName: 'getAchievement',
+			functionName: 'uri',
 			args: [params.achievementId],
 		}) as { data: AchievementDataType; isFetched: boolean };
 	const {
@@ -47,7 +48,11 @@ const Page = ({ params }: { params: { achievementId: string } }) => {
 			const metadata: NFTMetadata = await response.json();
 			setAchievementMetadata(metadata);
 		};
-		if (achievementData && achievementData.url !== '') {
+		if (
+			achievementData &&
+			achievementData.url !== '' &&
+			achievementData.creator === address
+		) {
 			fetchMetadata();
 		}
 	}, [achievementData]);
