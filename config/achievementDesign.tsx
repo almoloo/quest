@@ -13,7 +13,8 @@ export interface AchievementTemplate {
 	colors: AchievementTemplateColor[];
 	element: (data: {
 		emoji: string;
-		word: string;
+		primaryText: string;
+		secondaryText: string;
 		color: AchievementTemplateColor;
 	}) => React.ReactNode;
 }
@@ -42,10 +43,11 @@ export const achievementDesigns: AchievementTemplate[] = [
 				},
 			},
 		],
-		element: ({ emoji, word, color }) => (
+		element: ({ emoji, primaryText, secondaryText, color }) => (
 			<Badge1
 				emoji={emoji}
-				word={word}
+				primaryText={primaryText}
+				secondaryText={secondaryText}
 				color={color}
 			/>
 		),

@@ -2,7 +2,8 @@ import React from 'react';
 
 interface Badge1Props {
 	emoji: string;
-	word: string;
+	primaryText: string;
+	secondaryText: string;
 	color: {
 		classNames: {
 			outline: string;
@@ -28,10 +29,8 @@ const Badge1 = (props: Badge1Props) => {
 					</span>
 				</div>
 				<div>
-					<h3 className="text-xl font-bold">{props.word}</h3>
-					<p className="text-gray-600">
-						You've unlocked a new achievement!
-					</p>
+					<h3 className="text-xl font-bold">{props.primaryText}</h3>
+					<p className="text-gray-600">{props.secondaryText}</p>
 				</div>
 			</div>
 		</>

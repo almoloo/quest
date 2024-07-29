@@ -27,3 +27,18 @@ export interface NFTMetadata {
 	image: string;
 	attributes: NFTMetadataAttribute[];
 }
+
+declare global {
+	namespace React.JSX {
+		interface IntrinsicElements {
+			'em-emoji': EmojiAttributes;
+		}
+
+		interface EmojiAttributes {
+			id: string;
+			size: string;
+			set: string;
+			skin: number;
+		}
+	}
+}
