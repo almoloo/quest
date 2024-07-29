@@ -24,7 +24,7 @@ const Page = ({ params }: { params: { achievementId: string } }) => {
 		useReadContract({
 			address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS! as `0x${string}`,
 			abi,
-			functionName: 'uri',
+			functionName: 'getAchievement',
 			args: [params.achievementId],
 		}) as { data: AchievementDataType; isFetched: boolean };
 	const {
