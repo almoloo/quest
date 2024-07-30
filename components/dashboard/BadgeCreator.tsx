@@ -79,7 +79,7 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 				setPrimaryText(primaryTextTrait.value);
 			}
 			if (secondaryTextTrait) {
-				setPrimaryText(secondaryTextTrait.value);
+				setSecondaryText(secondaryTextTrait.value);
 			}
 			if (badgeTrait) {
 				setCurrentDesign(
