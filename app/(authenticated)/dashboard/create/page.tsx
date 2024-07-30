@@ -1,11 +1,11 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BadgeCreator from '@/components/dashboard/BadgeCreator';
 import PageTitle from '@/components/layout/PageTitle';
 
-import { TrophyTwoTone } from '@ant-design/icons';
-import { Button } from 'antd';
+import { InfoCircleTwoTone, TrophyTwoTone } from '@ant-design/icons';
+import { Button, Form, Input, message, TabsProps } from 'antd';
 import * as htmlToImage from 'html-to-image';
 import { toPng } from 'html-to-image';
 import { NFTMetadataAttribute } from '@/config/definitions';
@@ -13,21 +13,18 @@ import { generateNFTMetadata } from '@/config/utils';
 import { useWriteContract } from 'wagmi';
 import { abi } from '@/config/abi';
 
-// Save Badge as Image
-const captureBadge = (badge: HTMLDivElement) => {
-	if (badge) {
-		toPng(badge).then((dataUrl) => {
-			const a = document.createElement('a');
-			a.href = dataUrl;
-			a.download = 'badge.png';
-			a.click();
-		});
-	}
-};
+const { TextArea } = Input;
 
 const page = () => {
 	const badgeRef = useRef<HTMLDivElement>(null);
+	const [messageApi, contextHolder] = message.useMessage();
 
+	const [loading, setLoading] = useState<boolean>(false);
+	const [validation, setValidation] = useState({
+		name: false,
+		description: false,
+		template: false,
+	});
 	const [NFTTraits, setNFTTraits] = useState<NFTMetadataAttribute[]>([]);
 	const [NFTName, setNFTName] = useState<string>('');
 	const [NFTDescription, setNFTDescription] = useState<string>('');
@@ -38,12 +35,42 @@ const page = () => {
 		isPending,
 		isError,
 		error,
+		isSuccess,
 	} = useWriteContract();
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	useEffect(() => {
+		if (isSuccess) {
+			messageApi.success('Achievement created successfully!');
+		}
+		if (isError) {
+			messageApi.error('Failed to create achievement.');
+			console.error('Error:', error);
+		}
+	}, [isSuccess, isError]);
+
+	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		// GET BADGE IMAGE
 		try {
+			setLoading(true);
+			// VALIDATE
+			if (!NFTName) {
+				setValidation({ ...validation, name: true });
+				throw new Error('Please fill in the achievement name.');
+			}
+			if (!NFTDescription) {
+				setValidation({ ...validation, description: true });
+				throw new Error('Please fill in the achievement description.');
+			}
+			if (
+				NFTTraits.find((trait) => trait.trait_type === 'badgeId')
+					?.value === ''
+			) {
+				setValidation({ ...validation, template: true });
+				throw new Error('Please select a badge template.');
+			}
+
+			// GENERATE BADGE IMAGE
 			const badgeDataUrl = await toPng(badgeRef.current!);
 			const badgeBlob = await fetch(badgeDataUrl).then((res) =>
 				res.blob()
@@ -53,6 +80,8 @@ const page = () => {
 			});
 			const formData = new FormData();
 			formData.append('file', badgeFile);
+
+			// GENERATE METADATA
 			const nftMetadata = await generateNFTMetadata(
 				{
 					name: NFTName,
@@ -62,8 +91,6 @@ const page = () => {
 				},
 				formData
 			);
-			console.log('submitted');
-			console.log(nftMetadata);
 
 			writeContract({
 				address: process.env
@@ -72,13 +99,52 @@ const page = () => {
 				functionName: 'addAchievement',
 				args: [nftMetadata, true],
 			});
-		} catch (error) {
+		} catch (error: any) {
 			console.error('Failed:', error);
+			messageApi.error(error.message);
+		} finally {
+			setLoading(false);
 		}
 	};
 
+	const formTabItem: TabsProps['items'] = [
+		{
+			key: '1',
+			label: 'Achievement Info',
+			children: (
+				<Form
+					layout="vertical"
+					disabled={isPending || loading}
+				>
+					<Form.Item label="Achievement Name">
+						<Input
+							value={NFTName}
+							onChange={(e) => setNFTName(e.target.value)}
+							size="large"
+							count={{ max: 32 }}
+							status={validation.name ? 'error' : ''}
+						/>
+					</Form.Item>
+					<Form.Item label="Achievement Description">
+						<TextArea
+							value={NFTDescription}
+							onChange={(e) => setNFTDescription(e.target.value)}
+							size="large"
+							rows={4}
+							count={{ max: 256 }}
+							status={validation.description ? 'error' : ''}
+						/>
+					</Form.Item>
+				</Form>
+			),
+			icon: <InfoCircleTwoTone />,
+			disabled: isPending || loading,
+		},
+	];
+
 	return (
 		<>
+			{contextHolder}
 			<PageTitle
 				title="Create Achievement"
 				description="Create a new achievement for distribution."
@@ -88,27 +154,19 @@ const page = () => {
 			<BadgeCreator
 				badgeRef={badgeRef}
 				setTraits={setNFTTraits}
+				extraTabs={formTabItem}
+				disabled={isPending || loading}
 			/>
-			<Button onClick={() => captureBadge(badgeRef.current!)}>
-				Capture image
-			</Button>
-			<form onSubmit={handleSubmit}>
-				<input
-					type="text"
-					placeholder="name"
-					onChange={(e) => setNFTName(e.target.value)}
-					defaultValue={NFTName}
-				/>
-				<textarea
-					placeholder="description"
-					onChange={(e) => setNFTDescription(e.target.value)}
-					defaultValue={NFTDescription}
-				></textarea>
-				<button type="submit">Create</button>
-			</form>
-			<div>SUBMIT HASH: {submitHash}</div>
-			<div>isPending: {isPending && 'yes'}</div>
-			<div>isError: {isError && JSON.stringify(error)}</div>
+			<div>
+				<Button
+					type="primary"
+					onClick={handleSubmit}
+					loading={isPending || loading}
+					size="large"
+				>
+					Create Achievement
+				</Button>
+			</div>
 		</>
 	);
 };
