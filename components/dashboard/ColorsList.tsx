@@ -13,8 +13,8 @@ const ColorsList = ({
 	currentDesignColor,
 	handleChange,
 }: TemplateColorsProps) => {
-	return colors.length > 0 ? (
-		<div className="grid grid-cols-3 gap-2">
+	return (
+		<div className="grid grid-cols-3 gap-2 mb-5">
 			{colors.map((color) => {
 				return (
 					<button
@@ -38,10 +38,6 @@ const ColorsList = ({
 					</button>
 				);
 			})}
-		</div>
-	) : (
-		<div className="text-center text-neutral-500 py-10">
-			Please select a template first.
 		</div>
 	);
 };

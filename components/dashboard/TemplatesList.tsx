@@ -20,7 +20,7 @@ const TemplatesList = ({
 	secondaryText,
 }: TemplatesListProps) => {
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+		<div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-5">
 			{achievementDesigns.map((design) => (
 				<button
 					key={design.id}

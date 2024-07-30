@@ -24,6 +24,7 @@ interface BadgeCreatorProps {
 	setTraits: React.Dispatch<React.SetStateAction<NFTMetadataAttribute[]>>;
 	traits?: NFTMetadataAttribute[];
 	extraTabs?: TabsProps['items'];
+	disabled?: boolean;
 }
 
 const BadgeCreator = (props: BadgeCreatorProps) => {
@@ -36,6 +37,7 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 	const [secondaryText, setSecondaryText] = useState<string>(
 		"You've unlocked a new achievement!"
 	);
+	const extraTabs = props.extraTabs || [];
 
 	const handleTemplateChange = (id: number) => {
 		const design = achievementDesigns.find((d) => d.id === id);
@@ -45,11 +47,8 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 	};
 
 	const handleColorChange = (color: AchievementTemplateColor) => {
-		const design = achievementDesigns.find(
-			(d) => d.id === currentDesign?.id
-		);
-		const newColor = design?.colors.find((c) => c.id === color.id);
-		setCurrentDesignColor(newColor || design?.colors[0] || null);
+		const newColor = currentDesign?.colors.find((c) => c.id === color.id);
+		setCurrentDesignColor(newColor || currentDesign?.colors[0] || null);
 	};
 
 	useEffect(() => {
@@ -61,8 +60,11 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 			const emojiTrait = props.traits.find(
 				(trait) => trait.trait_type === 'emojiId'
 			);
-			const textTrait = props.traits.find(
-				(trait) => trait.trait_type === 'text'
+			const primaryTextTrait = props.traits.find(
+				(trait) => trait.trait_type === 'primaryText'
+			);
+			const secondaryTextTrait = props.traits.find(
+				(trait) => trait.trait_type === 'secondaryText'
 			);
 			const themeTrait = props.traits.find(
 				(trait) => trait.trait_type === 'themeId'
@@ -73,8 +75,11 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 			if (emojiTrait) {
 				setEmoji(emojiTrait.value);
 			}
-			if (textTrait) {
-				setPrimaryText(textTrait.value);
+			if (primaryTextTrait) {
+				setPrimaryText(primaryTextTrait.value);
+			}
+			if (secondaryTextTrait) {
+				setPrimaryText(secondaryTextTrait.value);
 			}
 			if (badgeTrait) {
 				setCurrentDesign(
@@ -85,9 +90,11 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 			}
 			if (themeTrait) {
 				setCurrentDesignColor(
-					achievementDesigns.find(
-						(d) => d.id === parseInt(themeTrait.value)
-					)?.colors[0]!
+					currentDesign
+						? currentDesign.colors.find(
+								(c) => c.id === parseInt(themeTrait.value)
+						  ) || currentDesign.colors[0]
+						: null
 				);
 			}
 		}
@@ -95,12 +102,7 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 
 	useEffect(() => {
 		if (currentDesign) {
-			const design = achievementDesigns.find(
-				(d) => d.id === currentDesign.id
-			);
-			if (design) {
-				setCurrentDesignColor(design.colors[0]);
-			}
+			setCurrentDesignColor(currentDesign.colors[0]);
 		}
 	}, [currentDesign]);
 
@@ -111,8 +113,12 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 				value: emoji,
 			},
 			{
-				trait_type: 'text',
+				trait_type: 'primaryText',
 				value: primaryText,
+			},
+			{
+				trait_type: 'secondaryText',
+				value: secondaryText,
 			},
 			{
 				trait_type: 'themeId',
@@ -123,12 +129,12 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 				value: currentDesign?.id.toString() || '',
 			},
 		]);
-	}, [currentDesign, currentDesignColor, emoji, primaryText]);
+	}, [currentDesign, currentDesignColor, emoji, primaryText, secondaryText]);
 
 	const tabItems: TabsProps['items'] = [
-		// ...props.extraTabs!,
+		...extraTabs!,
 		{
-			key: '1',
+			key: (extraTabs.length + 1).toString(),
 			label: 'Template',
 			children: (
 				<TemplatesList
@@ -141,9 +147,10 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 				/>
 			),
 			icon: <AppstoreTwoTone />,
+			disabled: props.disabled || false,
 		},
 		{
-			key: '2',
+			key: (extraTabs.length + 2).toString(),
 			label: 'Colors',
 			children: (
 				<ColorsList
@@ -153,11 +160,12 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 				/>
 			),
 			icon: <HighlightTwoTone />,
+			disabled: props.disabled || !currentDesign || false,
 		},
 		{
-			key: '3',
+			key: (extraTabs.length + 3).toString(),
 			label: 'Emoji',
-			children: currentDesign ? (
+			children: (
 				<Picker
 					data={data}
 					onEmojiSelect={(emoji: any) => setEmoji(emoji.id)}
@@ -166,17 +174,13 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 					previewPosition="none"
 					set="apple"
 					dynamicWidth={true}
-					style={{ width: '100%' }}
 				/>
-			) : (
-				<div className="text-center text-neutral-500 py-10">
-					Please select a template first.
-				</div>
 			),
 			icon: <SmileTwoTone />,
+			disabled: props.disabled || !currentDesign || false,
 		},
 		{
-			key: '4',
+			key: (extraTabs.length + 4).toString(),
 			label: 'Text',
 			children: (
 				<Form layout="vertical">
@@ -185,6 +189,7 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 							value={primaryText}
 							onChange={(e) => setPrimaryText(e.target.value)}
 							size="large"
+							disabled={props.disabled}
 						/>
 					</Form.Item>
 					<Form.Item label="Secondary Text">
@@ -192,26 +197,20 @@ const BadgeCreator = (props: BadgeCreatorProps) => {
 							value={secondaryText}
 							onChange={(e) => setSecondaryText(e.target.value)}
 							size="large"
+							disabled={props.disabled}
 						/>
 					</Form.Item>
 				</Form>
 			),
 			icon: <EditTwoTone />,
+			disabled: props.disabled || !currentDesign || false,
 		},
 	];
 
 	return (
 		<>
-			{/* <input
-						type="text"
-						value={word}
-						onChange={(e) => setWord(e.target.value)}
-					/> */}
-			<section className="checkeredBg rounded-xl p-10 border min-h-[30vh]">
-				<div
-					className="w-full h-full flex items-center justify-center"
-					ref={props.badgeRef}
-				>
+			<section className="checkeredBg flex items-center justify-center rounded-xl p-10 border min-h-[30vh]">
+				<div ref={props.badgeRef}>
 					{currentDesign && (
 						<>
 							{currentDesign.element({
