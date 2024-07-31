@@ -16,6 +16,7 @@ contract Quest is ERC1155, Ownable {
     }
 
     struct NftData {
+        uint256 id;
         address creator;
         string url;
         bool transferable;
@@ -83,7 +84,7 @@ contract Quest is ERC1155, Ownable {
      * @notice Adds a new achievement.
      */
     function addAchievement(string memory url, bool transferable) public {
-        nftData[lastId] = NftData(msg.sender, url, transferable);
+        nftData[lastId] = NftData(lastId, msg.sender, url, transferable);
         emit AchievementCreated(lastId, nftData[lastId]);
         lastId++;
     }
