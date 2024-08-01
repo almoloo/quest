@@ -1,23 +1,6 @@
 import Badge1 from '@/components/badges/Badge1';
-
-export interface AchievementTemplateColor {
-	id: number;
-	main: string;
-	accent: string;
-	classNames: any;
-}
-
-export interface AchievementTemplate {
-	id: number;
-	name: string;
-	colors: AchievementTemplateColor[];
-	element: (data: {
-		emoji: string;
-		primaryText: string;
-		secondaryText: string;
-		color: AchievementTemplateColor;
-	}) => React.ReactNode;
-}
+import Badge2 from '@/components/badges/Badge2';
+import { AchievementTemplate } from '@/config/definitions';
 
 export const achievementDesigns: AchievementTemplate[] = [
 	{
@@ -45,6 +28,28 @@ export const achievementDesigns: AchievementTemplate[] = [
 		],
 		element: ({ emoji, primaryText, secondaryText, color }) => (
 			<Badge1
+				emoji={emoji}
+				primaryText={primaryText}
+				secondaryText={secondaryText}
+				color={color}
+			/>
+		),
+	},
+	{
+		id: 2,
+		name: 'Badge2',
+		colors: [
+			{
+				id: 1,
+				main: 'bg-sky-600',
+				accent: 'bg-sky-300',
+				classNames: {
+					outline: 'border-sky-300',
+				},
+			},
+		],
+		element: ({ emoji, primaryText, secondaryText, color }) => (
+			<Badge2
 				emoji={emoji}
 				primaryText={primaryText}
 				secondaryText={secondaryText}

@@ -1,4 +1,4 @@
-import { AchievementTemplateColor } from '@/config/achievementDesign';
+import { AchievementTemplateColor } from '@/config/definitions';
 import { CheckCircleFilled } from '@ant-design/icons';
 import React from 'react';
 

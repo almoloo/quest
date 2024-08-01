@@ -28,6 +28,46 @@ export interface NFTMetadata {
 	attributes: NFTMetadataAttribute[];
 }
 
+export interface ParsedAchievementMetadata {
+	id: number;
+	name: string;
+	description: string;
+	image: string;
+	transferable: boolean;
+	url: string;
+	badgeId: number;
+	themeId: number;
+	emojiId: string;
+	primaryText: string;
+	secondaryText: string;
+}
+
+export interface Achievement {
+	creator: `0x${string}`;
+	id: bigint;
+	transferable: boolean;
+	url: string;
+}
+
+export interface AchievementTemplateColor {
+	id: number;
+	main: string;
+	accent: string;
+	classNames: any;
+}
+
+export interface AchievementTemplate {
+	id: number;
+	name: string;
+	colors: AchievementTemplateColor[];
+	element: (data: {
+		emoji: string;
+		primaryText: string;
+		secondaryText: string;
+		color: AchievementTemplateColor;
+	}) => React.ReactNode;
+}
+
 declare global {
 	namespace React.JSX {
 		interface IntrinsicElements {

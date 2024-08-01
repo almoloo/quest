@@ -140,6 +140,11 @@ export const abi = [
 			{
 				components: [
 					{
+						internalType: 'uint256',
+						name: 'id',
+						type: 'uint256',
+					},
+					{
 						internalType: 'address',
 						name: 'creator',
 						type: 'address',
@@ -175,6 +180,11 @@ export const abi = [
 			},
 			{
 				components: [
+					{
+						internalType: 'uint256',
+						name: 'id',
+						type: 'uint256',
+					},
 					{
 						internalType: 'address',
 						name: 'creator',
@@ -490,6 +500,11 @@ export const abi = [
 			{
 				components: [
 					{
+						internalType: 'uint256',
+						name: 'id',
+						type: 'uint256',
+					},
+					{
 						internalType: 'address',
 						name: 'creator',
 						type: 'address',
@@ -525,6 +540,11 @@ export const abi = [
 		outputs: [
 			{
 				components: [
+					{
+						internalType: 'uint256',
+						name: 'id',
+						type: 'uint256',
+					},
 					{
 						internalType: 'address',
 						name: 'creator',

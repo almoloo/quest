@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { init } from 'emoji-mart';
 import data from '@emoji-mart/data/sets/15/apple.json';
 import Picker from '@emoji-mart/react';
-import {
-	achievementDesigns,
-	AchievementTemplate,
-	AchievementTemplateColor,
-} from '@/config/achievementDesign';
+import { achievementDesigns } from '@/config/achievementDesign';
 import { Form, Input, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import { NFTMetadataAttribute } from '@/config/definitions';
+import {
+	AchievementTemplate,
+	AchievementTemplateColor,
+	NFTMetadataAttribute,
+} from '@/config/definitions';
 import {
 	AppstoreTwoTone,
 	EditTwoTone,
