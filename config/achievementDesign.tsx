@@ -41,10 +41,30 @@ export const achievementDesigns: AchievementTemplate[] = [
 		colors: [
 			{
 				id: 1,
-				main: 'bg-sky-600',
-				accent: 'bg-sky-300',
+				main: 'bg-sky-400',
+				accent: 'bg-rose-500',
 				classNames: {
-					outline: 'border-sky-300',
+					gradient1: 'from-sky-400 to-sky-600',
+					gradient2: 'from-sky-800 to-sky-950',
+					gradient3: 'from-sky-500 to-sky-900',
+					outline1: 'outline-sky-700',
+					outline2: 'outline-sky-400',
+					primary: 'bg-sky-400',
+					accent: 'bg-rose-500',
+				},
+			},
+			{
+				id: 2,
+				main: 'bg-cyan-900',
+				accent: 'bg-red-600',
+				classNames: {
+					gradient1: 'from-cyan-800 to-cyan-950',
+					gradient2: 'from-cyan-800 to-cyan-950',
+					gradient3: 'from-cyan-400 to-cyan-900',
+					outline1: 'outline-sky-700',
+					outline2: 'outline-sky-400',
+					primary: 'bg-sky-400',
+					accent: 'bg-rose-500',
 				},
 			},
 		],

@@ -24,7 +24,7 @@ const AchievementItem = ({ achievement }: AchievementItemProps) => {
 			className="flex flex-col border rounded-xl overflow-hidden text-inherit hover:text-inherit hover:border-sky-400 transition-colors"
 			key={achievement.id}
 		>
-			<div className="checkeredBg aspect-square flex justify-center items-center relative p-10">
+			<div className="checkeredBg aspect-square flex justify-center items-center relative p-10 grow">
 				{currentDesign?.element({
 					emoji: achievement.emojiId,
 					primaryText: achievement.primaryText,
@@ -44,7 +44,7 @@ const AchievementItem = ({ achievement }: AchievementItemProps) => {
 					</Link>
 				</div>
 			</div>
-			<div className="p-5">
+			<div className="p-5 shrink">
 				<h3 className="text-lg font-bold text-neutral-700">
 					{achievement.name}
 				</h3>
