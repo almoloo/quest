@@ -49,7 +49,6 @@ const Page = () => {
 		}) as { data: ProfileInput; isFetched: boolean };
 
 	useEffect(() => {
-		console.log('profileData:', profileData);
 		if (profileData && profileData?.name !== '') {
 			const profile = profileData;
 			const links: string[] = JSON.parse(

@@ -2,56 +2,16 @@
 
 import React, { useEffect } from 'react';
 import { abi } from '@/config/abi';
-import { achievementDesigns } from '@/config/achievementDesign';
-import {
-	Achievement,
-	NFTMetadata,
-	ParsedAchievementMetadata,
-} from '@/config/definitions';
-import { convertIPFSHash } from '@/config/utils';
+import { Achievement, ParsedAchievementMetadata } from '@/config/definitions';
+import { convertIPFSHash, convertNFTMetadata } from '@/config/utils';
 import { init } from 'emoji-mart';
 import data from '@emoji-mart/data/sets/15/apple.json';
 import { useAccount, useReadContract } from 'wagmi';
-import Link from 'next/link';
-import { Spin, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import AchievementItem from '@/components/dashboard/AchievementItem';
 import BadgeLoader from '@/components/dashboard/BadgeLoader';
-
-const convertNFTMetadata = (
-	metadata: NFTMetadata,
-	id: number,
-	transferable: boolean,
-	url: string
-): ParsedAchievementMetadata => {
-	return {
-		id,
-		name: metadata.name,
-		description: metadata.description,
-		image: metadata.image,
-		transferable,
-		url,
-		badgeId: Number(
-			metadata.attributes.find(
-				(attribute) => attribute.trait_type === 'badgeId'
-			)?.value
-		),
-		themeId: Number(
-			metadata.attributes.find(
-				(attribute) => attribute.trait_type === 'themeId'
-			)?.value
-		),
-		emojiId: metadata.attributes.find(
-			(attribute) => attribute.trait_type === 'emojiId'
-		)?.value!,
-		primaryText: metadata.attributes.find(
-			(attribute) => attribute.trait_type === 'primaryText'
-		)?.value!,
-		secondaryText: metadata.attributes.find(
-			(attribute) => attribute.trait_type === 'secondaryText'
-		)?.value!,
-	};
-};
+import { TrophyOutlined, UnorderedListOutlined } from '@ant-design/icons';
 
 const Page = () => {
 	const { address } = useAccount();
@@ -93,6 +53,7 @@ const Page = () => {
 		{
 			key: '1',
 			label: 'Created Achievements',
+			icon: <UnorderedListOutlined />,
 			children: !fetchedAchievements ? (
 				<BadgeLoader />
 			) : (
@@ -106,6 +67,7 @@ const Page = () => {
 		{
 			key: '2',
 			label: 'Received Badges',
+			icon: <TrophyOutlined />,
 			children: (
 				<>
 					<div>2</div>

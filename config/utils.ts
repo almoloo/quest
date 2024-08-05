@@ -1,4 +1,4 @@
-import { NFTMetadata } from '@/config/definitions';
+import { NFTMetadata, ParsedAchievementMetadata } from '@/config/definitions';
 import { uploadFileToIPFS, uploadJSONToIPFS } from './action';
 
 export const convertIPFSHash = (hash: string) => {
@@ -22,4 +22,39 @@ export const generateNFTMetadata = async (
 	} catch (error) {
 		console.error(error);
 	}
+};
+
+export const convertNFTMetadata = (
+	metadata: NFTMetadata,
+	id: number,
+	transferable: boolean,
+	url: string
+): ParsedAchievementMetadata => {
+	return {
+		id,
+		name: metadata.name,
+		description: metadata.description,
+		image: metadata.image,
+		transferable,
+		url,
+		badgeId: Number(
+			metadata.attributes.find(
+				(attribute) => attribute.trait_type === 'badgeId'
+			)?.value
+		),
+		themeId: Number(
+			metadata.attributes.find(
+				(attribute) => attribute.trait_type === 'themeId'
+			)?.value
+		),
+		emojiId: metadata.attributes.find(
+			(attribute) => attribute.trait_type === 'emojiId'
+		)?.value!,
+		primaryText: metadata.attributes.find(
+			(attribute) => attribute.trait_type === 'primaryText'
+		)?.value!,
+		secondaryText: metadata.attributes.find(
+			(attribute) => attribute.trait_type === 'secondaryText'
+		)?.value!,
+	};
 };

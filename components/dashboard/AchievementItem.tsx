@@ -1,7 +1,7 @@
 import { achievementDesigns } from '@/config/achievementDesign';
 import { ParsedAchievementMetadata } from '@/config/definitions';
 import { convertIPFSHash } from '@/config/utils';
-import { CloudDownloadOutlined } from '@ant-design/icons';
+import { CloudDownloadOutlined, SendOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import Link from 'next/link';
 import React from 'react';
@@ -31,7 +31,19 @@ const AchievementItem = ({ achievement }: AchievementItemProps) => {
 					secondaryText: achievement.secondaryText,
 					color: currentColor!,
 				})}
-				<div className="absolute top-4 left-4 flex items-start gap-3">
+				<div className="absolute top-4 left-4 flex items-start gap-2">
+					<Link
+						href={`/dashboard/send/${achievement.id}`}
+						passHref
+					>
+						<Button
+							icon={<SendOutlined />}
+							onClick={(e) => e.stopPropagation()}
+							type="primary"
+						>
+							Award to User
+						</Button>
+					</Link>
 					<Link
 						href={convertIPFSHash(achievement.image)}
 						target="_blank"
