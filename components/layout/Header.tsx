@@ -8,9 +8,10 @@ const Header = () => {
 				<Image
 					src="/logo.svg"
 					alt="logo"
+					className="h-12 w-auto"
 					width={100}
-					height={100}
-					className="h-12"
+					height={48}
+					priority
 				/>
 			</Link>
 			<nav>

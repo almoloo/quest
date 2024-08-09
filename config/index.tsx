@@ -58,7 +58,7 @@ const metadata = {
 };
 
 export const config = defaultWagmiConfig({
-	chains: [openCampusTestnet, localChain] as const,
+	chains: [openCampusTestnet] as const,
 	projectId: walletConnectProjectId,
 	metadata,
 	ssr: true,

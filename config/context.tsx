@@ -15,8 +15,6 @@ if (!walletConnectProjectId) {
 createWeb3Modal({
 	wagmiConfig: config,
 	projectId: walletConnectProjectId,
-	enableAnalytics: true,
-	enableOnramp: true,
 });
 
 export default function Web3ModalProvider({
@@ -24,7 +22,7 @@ export default function Web3ModalProvider({
 	initialState,
 }: {
 	children: ReactNode;
-	initialState: State;
+	initialState?: State;
 }) {
 	return (
 		<WagmiProvider

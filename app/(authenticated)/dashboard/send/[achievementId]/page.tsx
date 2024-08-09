@@ -95,7 +95,7 @@ const Page = ({ params }: { params: { achievementId: string } }) => {
 		setFormSubmitting(true);
 		try {
 			if (recipients.length > 1) {
-				const amounts = [];
+				const amounts: number[] = [];
 				recipients.forEach(() => amounts.push(1));
 
 				writeContract({

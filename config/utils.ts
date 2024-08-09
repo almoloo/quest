@@ -1,4 +1,8 @@
-import { NFTMetadata, ParsedAchievementMetadata } from '@/config/definitions';
+import {
+	NFTMetadata,
+	ParsedAchievementMetadata,
+	UserTokensResponse,
+} from '@/config/definitions';
 import { uploadFileToIPFS, uploadJSONToIPFS } from './action';
 
 export const convertIPFSHash = (hash: string) => {
@@ -57,4 +61,12 @@ export const convertNFTMetadata = (
 			(attribute) => attribute.trait_type === 'secondaryText'
 		)?.value!,
 	};
+};
+
+export const getUserTokens = async (address: `0x${string}`) => {
+	const endpoint = `https://opencampus-codex.blockscout.com/api/v2/addresses/${address}/tokens?type=ERC-1155`;
+	const response = await fetch(endpoint);
+	const responseJson = await response.json();
+	const data: UserTokensResponse[] = responseJson.items;
+	return data;
 };

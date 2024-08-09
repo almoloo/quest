@@ -19,52 +19,29 @@ const AchievementItem = ({ achievement }: AchievementItemProps) => {
 	);
 
 	return (
-		<Link
-			href={`/dashboard/edit/${achievement.id}`}
-			className="flex flex-col border rounded-xl overflow-hidden text-inherit hover:text-inherit hover:border-sky-400 transition-colors"
-			key={achievement.id}
-		>
-			<div className="checkeredBg aspect-square flex justify-center items-center relative p-10 grow">
-				{currentDesign?.element({
-					emoji: achievement.emojiId,
-					primaryText: achievement.primaryText,
-					secondaryText: achievement.secondaryText,
-					color: currentColor!,
-				})}
-				<div className="absolute top-4 left-4 flex items-start gap-2">
-					<Link
-						href={`/dashboard/send/${achievement.id}`}
-						passHref
-					>
-						<Button
-							icon={<SendOutlined />}
-							onClick={(e) => e.stopPropagation()}
-							type="primary"
-						>
-							Award to User
-						</Button>
-					</Link>
-					<Link
-						href={convertIPFSHash(achievement.image)}
-						target="_blank"
-						passHref
-					>
-						<Button
-							icon={<CloudDownloadOutlined />}
-							onClick={(e) => e.stopPropagation()}
-						/>
-					</Link>
+		<div className="relative flex">
+			<Link
+				href={`/dashboard/edit/${achievement.id}`}
+				className="flex flex-col border rounded-xl overflow-hidden text-inherit hover:text-inherit hover:border-sky-400 transition-colors"
+				key={achievement.id}
+			>
+				<div className="checkeredBg aspect-square flex justify-center items-center relative p-10 grow">
+					{currentDesign?.element({
+						emoji: achievement.emojiId,
+						primaryText: achievement.primaryText,
+						secondaryText: achievement.secondaryText,
+						color: currentColor!,
+					})}
 				</div>
-			</div>
-			<div className="p-5 shrink">
-				<h3 className="text-lg font-bold text-neutral-700">
-					{achievement.name}
-				</h3>
-				<p className="font-light line-clamp-1">
-					{achievement.description}
-				</p>
-			</div>
-			{/* 
+				<div className="p-5 shrink">
+					<h3 className="text-lg font-bold text-neutral-700">
+						{achievement.name}
+					</h3>
+					<p className="font-light line-clamp-1">
+						{achievement.description}
+					</p>
+				</div>
+				{/* 
 			<div>
 				<strong>image: </strong>
 				{achievement.image}
@@ -79,7 +56,32 @@ const AchievementItem = ({ achievement }: AchievementItemProps) => {
 			</div>
 			
 			<Link href={`/dashboard/edit/${achievement.id}`}>Edit</Link> */}
-		</Link>
+			</Link>
+			<div className="absolute top-4 left-4 flex items-start gap-2">
+				<Link
+					href={`/dashboard/send/${achievement.id}`}
+					passHref
+				>
+					<Button
+						icon={<SendOutlined />}
+						onClick={(e) => e.stopPropagation()}
+						type="primary"
+					>
+						Award to User
+					</Button>
+				</Link>
+				<Link
+					href={convertIPFSHash(achievement.image)}
+					target="_blank"
+					passHref
+				>
+					<Button
+						icon={<CloudDownloadOutlined />}
+						onClick={(e) => e.stopPropagation()}
+					/>
+				</Link>
+			</div>
+		</div>
 	);
 };
 
