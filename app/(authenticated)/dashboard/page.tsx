@@ -95,7 +95,9 @@ const Page = () => {
 				receivedBadges === null ? (
 					<BadgeLoader />
 				) : receivedBadges?.length === 0 ? (
-					<div>no badges</div>
+					<div className="text-center text-neutral-600">
+						You've not received any badges yet
+					</div>
 				) : (
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 						{receivedBadges.map((badge) => (

@@ -4,6 +4,7 @@ import { Achievement, ParsedAchievementMetadata } from '@/config/definitions';
 import { convertIPFSHash, convertNFTMetadata } from '@/config/utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useReadContract } from 'wagmi';
+import BadgeLoader from '@/components/dashboard/BadgeLoader';
 
 interface ReceivedBadgeProps {
 	badgeId: number;
@@ -48,7 +49,7 @@ const ReceivedBadge = ({ badgeId }: ReceivedBadgeProps) => {
 	);
 
 	return isFetched ? (
-		<div className="flex items-center justify-center">
+		<div className="checkeredBg rounded-xl border flex justify-center items-center relative p-10 grow">
 			{currentDesign?.element({
 				emoji: badgeInfo?.emojiId!,
 				primaryText: badgeInfo?.primaryText!,
@@ -57,7 +58,7 @@ const ReceivedBadge = ({ badgeId }: ReceivedBadgeProps) => {
 			})}
 		</div>
 	) : (
-		<>loading...</>
+		<BadgeLoader />
 	);
 };
 
