@@ -85,13 +85,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 							</strong>
 						</div>
 						<div className="ml-auto">
-							<Button
-								type="link"
-								size="small"
-								onClick={() => router.push(`/u/${address}`)}
+							<Link
+								href={`/u/${address}`}
+								passHref
 							>
-								View Profile
-							</Button>
+								<Button
+									type="link"
+									size="small"
+								>
+									View Profile
+								</Button>
+							</Link>
 						</div>
 					</div>
 				) : (
