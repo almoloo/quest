@@ -14,7 +14,7 @@
 
 @layer utilities {
 	.padding {
-		@apply px-5 py-3 lg:px-10 lg:py-5;
+		@apply px-5 py-3 lg:px-10 lg:py-2;
 	}
 
 	.checkeredBg {
