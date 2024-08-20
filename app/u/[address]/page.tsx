@@ -97,9 +97,10 @@ const Profile = ({ params }: { params: { address: string } }) => {
 								<Image
 									src={convertIPFSHash(profileData.coverUrl)}
 									alt="Profile"
-									layout="fill"
-									objectFit="cover"
-									className="w-full h-full"
+									height={256}
+									width={1024}
+									className="w-full h-full object-cover"
+									priority
 								/>
 							)}
 						</div>
@@ -211,6 +212,7 @@ const Profile = ({ params }: { params: { address: string } }) => {
 														<Link
 															href={link}
 															target="_blank"
+															key={link}
 															passHref
 														>
 															<Button
