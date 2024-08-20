@@ -1,8 +1,19 @@
 'use client';
 
+import BadgeLoader from '@/components/dashboard/BadgeLoader';
+import ReceivedBadge from '@/components/dashboard/ReceivedBadge';
 import { abi } from '@/config/abi';
-import { ProfileInput } from '@/config/definitions';
-import { convertIPFSHash } from '@/config/utils';
+import {
+	Achievement,
+	ParsedAchievementMetadata,
+	ProfileInput,
+	UserTokensResponse,
+} from '@/config/definitions';
+import {
+	convertIPFSHash,
+	convertNFTMetadata,
+	getUserTokens,
+} from '@/config/utils';
 import {
 	FacebookOutlined,
 	GithubOutlined,
@@ -17,7 +28,9 @@ import {
 import { Button, Spin } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { init } from 'emoji-mart';
+import data from '@emoji-mart/data/sets/15/apple.json';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useReadContract } from 'wagmi';
 
 const Profile = ({ params }: { params: { address: string } }) => {
@@ -28,6 +41,51 @@ const Profile = ({ params }: { params: { address: string } }) => {
 			functionName: 'getProfile',
 			args: [params.address],
 		}) as { data: ProfileInput; isFetched: boolean };
+
+	const { data: achievements, isFetched: fetchedAchievements } =
+		useReadContract({
+			address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS! as `0x${string}`,
+			abi,
+			functionName: 'getNftsByCreator',
+			args: [params.address],
+		}) as { data: Achievement[]; isFetched: boolean };
+
+	const [achievementsData, setAchievementsData] = React.useState<
+		ParsedAchievementMetadata[]
+	>([]);
+	const [receivedBadges, setReceivedBadges] = useState<
+		UserTokensResponse[] | null
+	>(null);
+
+	const fetchReceivedBadges = useCallback(async () => {
+		const data = await getUserTokens(params.address as `0x${string}`);
+		setReceivedBadges(data);
+	}, [params.address]);
+
+	useEffect(() => {
+		init({ data });
+	}, []);
+
+	useEffect(() => {
+		if (params.address) fetchReceivedBadges();
+	}, [params.address]);
+
+	useEffect(() => {
+		if (fetchedAchievements && achievementsData.length === 0) {
+			achievements.forEach(async (achievement) => {
+				const achievementUrl = convertIPFSHash(achievement.url);
+				const metadata = await fetch(achievementUrl);
+				const metadataJson = await metadata.json();
+				const parsedMetadata = convertNFTMetadata(
+					metadataJson,
+					Number(achievement.id),
+					achievement.transferable,
+					achievement.url
+				);
+				setAchievementsData((prev) => [...prev, parsedMetadata]);
+			});
+		}
+	}, [fetchedAchievements]);
 
 	return (
 		<Spin spinning={!fetchedProfileData}>
@@ -170,6 +228,30 @@ const Profile = ({ params }: { params: { address: string } }) => {
 						{fetchedProfileData && profileData.bio && (
 							<div className="m-5 pt-5 mt-0 border-t text-neutral-700 text-sm">
 								{profileData.bio}
+							</div>
+						)}
+					</section>
+					<section className="mt-10">
+						<h2 className="flex items-center text-center font-bold text-xl mb-10 gap-5">
+							<span className="border-b border-dashed grow"></span>
+							Received Badges
+							<span className="border-b border-dashed grow"></span>
+						</h2>
+						{receivedBadges === null ? (
+							<BadgeLoader />
+						) : receivedBadges?.length === 0 ? (
+							<div className="text-center text-neutral-600">
+								No badges to show!
+							</div>
+						) : (
+							<div className="flex flex-col gap-5">
+								{receivedBadges.map((badge) => (
+									<ReceivedBadge
+										badgeId={Number(badge.token_id)}
+										value={Number(badge.value)}
+										key={Number(badge.token_id)}
+									/>
+								))}
 							</div>
 						)}
 					</section>
