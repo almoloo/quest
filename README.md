@@ -2,7 +2,7 @@
 
 Welcome to **Quest**! This project is designed to help you manage and display achievements using blockchain technology on the **Open Campus** network. 🚀
 
-![Quest Dashboard](https://via.placeholder.com/800x400.png?text=Quest+Dashboard)
+![Quest Dashboard](./public/shot-1.png)
 
 ## 📋 Table of Contents
 
@@ -79,13 +79,13 @@ Once the development server is running, you can access Quest at `http://localhos
 2. **Customize**: Add your own emoji, text, and colors.
 3. **Save**: Save your customized achievement to the Open Campus network.
 
-![Creating Achievements](https://via.placeholder.com/800x400.png?text=Creating+Achievements)
+![Creating Achievements](./public/shot-2.png)
 
 ### Viewing Achievements
 
 View all your achievements in a beautiful dashboard. Each achievement is verified and stored on the Open Campus network.
 
-![Viewing Achievements](https://via.placeholder.com/800x400.png?text=Viewing+Achievements)
+![Viewing Achievements](./public/shot-3.png)
 
 ## 🎨 Customization
 
@@ -95,8 +95,6 @@ Quest allows you to fully customize your achievements. Here are some of the cust
 -   **Text**: Add custom text to your achievements.
 -   **Colors**: Customize the background and text colors.
 -   **Templates**: Select from multiple templates to give your achievements a unique look.
-
-![Customization Options](https://via.placeholder.com/800x400.png?text=Customization+Options)
 
 ## 🤝 Contributing
 
